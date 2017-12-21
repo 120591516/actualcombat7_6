@@ -9,7 +9,7 @@
 	<packaging>jar</packaging>
 
 	<name>actualcombat7_6</name>
-	<description>ActualCombat project for Spring Boot with </description>
+	<description>ActualCombat project for Spring Boot with thymeleaf websocket</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
