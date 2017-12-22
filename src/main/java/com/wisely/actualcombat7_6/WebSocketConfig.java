@@ -3,8 +3,10 @@ package com.wisely.actualcombat7_6;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.config.annotation.AbstractWebSocketMessageBrokerConfigurer;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
@@ -16,6 +18,8 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
  * 通过@EnableWebSocketMessageBroker注解开启使用STOMP协议来传输基于代理 （message
  * broker）的消息，这时控制器支持使用@MessageMapping，就像是使用@RequestMapping一样
  */
+@EnableWebMvc
+@EnableWebSocket
 @EnableWebSocketMessageBroker
 public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer implements WebSocketConfigurer {
 
