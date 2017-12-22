@@ -1,10 +1,66 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+<meta charset="UTF-8" />
+<title>Spring Boot +WebSocket +广播式</title>
 </head>
-<body>
-
+<body onload="disconnect()">
+<noscript>
+	<h2 style="color:#ff0000">貌似你的浏览器不支持WebSocket</h2>
+</noscript>
+<div>
+	<div>
+		<button id="connect" onclick="connect();">连接</button>
+		<button id="disconnect" disabled="disabled" onclick="disconnect();">断开连接</button>
+	</div>
+	<div id="conversationDiv">
+		<label>输入你的名字</label><input type="text" id="name" />
+		<button id="sendName" onclick="sendName()">发送</button>
+		<p id="response"></p>
+	</div>
+</div>
+<script type="text/javascript" src="stomp.min.js"></script>
+<script type="text/javascript" src="stomp.js"></script>
+<script type="text/javascript" src="jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="sockjs.js"></script>
+<script type="text/javascript">
+	var stompClient=null;
+	console.info($('#connect').text());
+	function setConnected(connected){
+		$('#connect').disabled = connected;
+		$('#disconnect').disabled = !connected;
+		document.getElementById('conversationDiv').style.visibility = connected?'visible':'hidden';
+		$('#response').html();
+	}
+	function connect(){
+		// 连接SockJS的endpoint名称为/endpointWisely
+		var socket =new SockJS('/endpointWisely');	
+		// 使用STOMP子协议的WebSocket客户端
+		stompClient = Stomp.over(socket);
+		//连接WebSocket服务
+		stompClient.connect({},function(frame){
+			setConnected(true);
+			console.info('connected'+frame );
+			stompClient.subscribe('/topic/getResponse',function(response){
+				showResponse(JSON.parse(response.body).responseMessage);
+			});
+		});
+	}
+	function disconnect(){
+		if(stompClient!=null){
+			stompClient.disconnect();
+		}
+		setConnected(false);
+		console.info("Disconnected");
+	}
+	function sendName(){
+		var name = $('#name').val();
+		stompClient.send('/welcome',{},JSON.stringify({'name':name}));
+	}
+	function showResponse(message){
+		var response = $('#response');
+		response.append(message);
+	}
+</script>
 </body>
 </html>

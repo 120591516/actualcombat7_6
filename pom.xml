@@ -39,6 +39,12 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- spring boot 热部署 自动编译依赖 -->
+		 <dependency>    
+	        <groupId>org.springframework.boot</groupId>    
+	        <artifactId>spring-boot-devtools</artifactId>    
+	        <optional>true</optional>    
+	    </dependency> 
 	</dependencies>
 
 	<build>
