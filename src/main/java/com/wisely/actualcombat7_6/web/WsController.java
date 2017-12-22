@@ -1,7 +1,11 @@
 package com.wisely.actualcombat7_6.web;
 
+import java.security.Principal;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 import com.wisely.actualcombat7_6.domain.WiselyMessage;
@@ -24,5 +28,21 @@ public class WsController {
 	public WiselyResponse say(WiselyMessage message) throws Exception {
 		Thread.sleep(3000);
 		return new WiselyResponse("Welcome, " + message.getName() + "!");
+	}
+
+	// 通过simpMessagingTemplate 向浏览器发送消息
+	@Autowired
+	private SimpMessagingTemplate simpMessagingTemplate;
+
+	@MessageMapping("/chat")
+	public void handleChat(Principal principal, String msg) {
+		if (principal.getName().equals("wwt")) {
+			simpMessagingTemplate.convertAndSendToUser("wisely", "/queue/notifications",
+					principal.getName() + "-send:" + msg);
+		} else {
+			simpMessagingTemplate.convertAndSendToUser("wwt", "/queue/notifications",
+					principal.getName() + "-send:" + msg);
+
+		}
 	}
 }
