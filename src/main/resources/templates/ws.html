@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="htpp://www.thymeleaf.org"
+	xmlns:sec="htpp://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
 <meta charset="UTF-8" />
 <title>Spring Boot +WebSocket +广播式</title>
@@ -19,6 +20,7 @@
 		<p id="response"></p>
 	</div>
 </div>
+<script th:src="@{stomp.min.js}"></script>
 <script type="text/javascript" src="stomp.min.js"></script>
 <script type="text/javascript" src="stomp.js"></script>
 <script type="text/javascript" src="jquery-3.2.1.min.js"></script>

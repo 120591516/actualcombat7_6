@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<meta charset="UTF-8"/>
+<title>Home</title>
+<script th:src="@{stomp.min.js}"></script>
+<script type="text/javascript" th:src="@{stomp.js}"></script>
+<script type="text/javascript" th:src="@{jquery-3.2.1.min.js}"></script>
+<script type="text/javascript" th:src="@{sockjs.js}"></script>
+</head>
+<body>
+	<p>聊天室</p>
+	<form id="wiselyForm">
+		<textarea rows="4" cols="60" name="text"></textarea>
+		<input type="submit" />
+	</form>
+	<script type="text/javascript">
+		$('#wiselyForm').submit(function(e){
+			e.preventDefault();
+			var text=$('#wiselyForm').find('textarea[name="text"]').val();
+			console.info(text);
+			sendSpittle(text);
+		});
+		var socket =new SockJS('/endpointChat');	
+		var stompClient = Stomp.over(socket);
+		stompClient.connect('guest','guest',function(frame){
+			console.info('connected'+frame );
+			stompClient.subscribe('/user/queue/notifications',handleNotification);
+		});
+		function handleNotification(message){
+			$('#output').append('<b>Received:'+message.body+'</b><br/>');
+		}
+		
+		function sendSpittle(text){
+			stompClient.send('/chat',{},text);
+		}
+		$('#stop').click(function(){socket.close()});
+		
+	</script>
+	<div id="output"></div>
+</body>
+</html>
